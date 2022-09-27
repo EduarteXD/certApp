@@ -42,7 +42,7 @@ const execute = (data, socket) => {
 
     let buffer = ''
     let newLine = '\r\n'
-    // let rewrite = '\r'
+    let rewrite = '\r'
 
     /*
     process.on('data', data => {
@@ -60,7 +60,7 @@ const execute = (data, socket) => {
 
     process.onData(data => {
         buffer += data
-        if (buffer.slice(-newLine.length) === newLine) {
+        if (buffer.slice(-newLine.length) === newLine || buffer.slice(-rewrite.length) === rewrite) {
             let toSend = buffer.replace('\n', '').split('\r')
             toSend.forEach(val => {
                 socket.emit('stdout', { data: val })

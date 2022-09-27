@@ -3,16 +3,22 @@ import React from 'react'
 import io from 'socket.io-client'
 import DetailPage from './pages/detail/DetailPage'
 import {
-  createHashRouter,
-  RouterProvider
+  Routes,
+  Route,
+  useLocation
 } from "react-router-dom"
 import { AnimatePresence } from 'framer-motion'
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 
-function App() {
+const App = () => {
   const [ws, setWs] = React.useState(null)
-  // const [page, setPage] = React.useState(0)
   const [ready, setReady] = React.useState(false)
   const [domain, setDomain] = React.useState('')
+
+  const location = useLocation()
 
   React.useEffect(() => {
     const initWs = () => {
@@ -35,33 +41,29 @@ function App() {
     } else {
       alert('please wait for the ws connection to establish...')
     }
-    // setPage(1)
-    // console.log(domain)
   }
-
-  const router = createHashRouter([
-    {
-      path: '/',
-      element:
-        <MainPage
-          ws={ws}
-          moveon={handleNext}
-        />
-    },
-    {
-      path: '/issue/',
-      element:
-        <DetailPage
-          ws={ws}
-          domain={domain}
-        />
-    }
-  ])
 
   return (
     <div className='App'>
-      <AnimatePresence>
-        <RouterProvider router={router} />
+      <AnimatePresence mode='wait'>
+        <Routes key={location.pathname} location={location}>
+          <Route path='/'
+            element={
+              <MainPage
+                ws={ws}
+                moveon={handleNext}
+              />
+            }
+          />
+          <Route path='/issue/'
+            element={
+              <DetailPage
+                ws={ws}
+                domain={domain}
+              />
+            }
+          />
+        </Routes>
       </AnimatePresence>
     </div>
   )

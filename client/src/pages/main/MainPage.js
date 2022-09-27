@@ -34,7 +34,7 @@ const MainPage = (props) => {
             }}
             exit={{ 
                 opacity: 0,
-                transform: 'translate(-50%, 50%)'
+                transform: 'translate(-50%, -150%)'
             }}
         >
             <Box>
@@ -43,7 +43,8 @@ const MainPage = (props) => {
                     sx={{
                         alignItems: 'center',
                         width: '500px',
-                        display: 'flex'
+                        display: 'flex',
+                        p: '2px 4px'
                     }}
                     onSubmit={handleSubmit}
                 >
