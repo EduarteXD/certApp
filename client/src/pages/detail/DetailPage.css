@@ -1,0 +1,14 @@
+.info {
+    color: white;
+    display: block;
+}
+
+.error {
+    color: red;
+}
+
+.color .error {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: large;
+    font-weight: bold;
+}
