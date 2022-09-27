@@ -3,11 +3,11 @@ import './MainPage.css'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import LockIcon from '@mui/icons-material/Lock'
 import { Box, Icon, IconButton, InputBase, Paper } from '@mui/material'
+import { motion } from 'framer-motion'
 
 const MainPage = (props) => {
-    const ws = props.ws
+    // const ws = props.ws
     const moveon = props.moveon
-
 
     const [domain, setDomain] = React.useState('')
 
@@ -22,8 +22,22 @@ const MainPage = (props) => {
     }
 
     return (
-        <>
-            <Box className='main'>
+        <motion.div
+            className='main'
+            initial={{ 
+                opacity: 0,
+                transform: 'translate(-50%, 50%)'
+            }}
+            animate={{ 
+                opacity: 1,
+                transform: 'translate(-50%, -50%)'
+            }}
+            exit={{ 
+                opacity: 0,
+                transform: 'translate(-50%, 50%)'
+            }}
+        >
+            <Box>
                 <Paper
                     component='form'
                     sx={{
@@ -64,7 +78,7 @@ const MainPage = (props) => {
                     </IconButton>
                 </Paper>
             </Box>
-        </>
+        </motion.div>
     )
 }
 
