@@ -1,7 +1,8 @@
-import MainPage from './pages/main/MainPage'
 import React from 'react'
 import io from 'socket.io-client'
-import DetailPage from './pages/detail/DetailPage'
+import MainPage from './pages/main/MainPage'
+import IssuePage from './pages/issue/IssuePage'
+import ErrorPage from './pages/error/ErrorPage'
 import {
   Routes,
   Route,
@@ -53,16 +54,20 @@ const App = () => {
               <MainPage
                 ws={ws}
                 moveon={handleNext}
+                ready={ready}
               />
             }
           />
           <Route path='/issue/'
             element={
-              <DetailPage
+              <IssuePage
                 ws={ws}
                 domain={domain}
               />
             }
+          />
+          <Route path='*' 
+            element={<ErrorPage />}
           />
         </Routes>
       </AnimatePresence>

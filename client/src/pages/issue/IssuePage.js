@@ -17,11 +17,11 @@ import DnsIcon from '@mui/icons-material/Dns'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
-import './DetailPage.css'
+import './IssuePage.css'
 
 const convert = new Convert()
 
-const DetailPage = (props) => {
+const IssuePage = (props) => {
     const ws = props.ws
     const normalViewRef = React.useRef()
     const consoleViewRef = React.useRef()
@@ -114,7 +114,8 @@ const DetailPage = (props) => {
                 transform: 'translate(-50%, -55%)'
             }}
             style={{
-                width: '67%',
+                width: '67vw',
+                minWidth: '600px',
                 height: '55%',
                 margin: '0 auto',
                 position: 'absolute',
@@ -435,4 +436,4 @@ const DetailPage = (props) => {
     )
 }
 
-export default DetailPage
+export default IssuePage

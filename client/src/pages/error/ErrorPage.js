@@ -1,16 +1,18 @@
-import { useRouteError } from 'react-router-dom'
+import { Button } from '@mui/material'
 import './ErrorPage.css'
 
 const ErrorPage = () => {
-    const error = useRouteError()
-
     return (
         <div className='errorPage'>
             <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
-            <p>
-                <i>{error.statusText || error.message}</i>
-            </p>
+            <p>页面未找到</p>
+            <Button
+                onClick={() => {
+                    window.location.hash = '/'
+                }}
+            >
+                返回主页
+            </Button>
         </div>
     )
 }

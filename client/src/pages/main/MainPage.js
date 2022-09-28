@@ -33,15 +33,15 @@ const MainPage = (props) => {
             className='main'
             initial={{ 
                 opacity: 0,
-                transform: 'translate(-50%, 50%)'
+                y: '35vh'
             }}
             animate={{ 
                 opacity: 1,
-                transform: 'translate(-50%, -50%)'
+                y: '40vh'
             }}
             exit={{ 
                 opacity: 0,
-                transform: 'translate(-50%, -150%)'
+                y: '35vh'
             }}
         >
             <Box>
@@ -49,9 +49,11 @@ const MainPage = (props) => {
                     component='form'
                     sx={{
                         alignItems: 'center',
-                        width: '500px',
+                        width: '30vw',
+                        minWidth: '300px',
                         display: 'flex',
-                        p: '2px 4px'
+                        p: '2px 4px',
+                        margin: '0 auto'
                     }}
                     onSubmit={handleSubmit}
                 >
@@ -71,10 +73,11 @@ const MainPage = (props) => {
                             p: '10px'
                         }}
                         inputProps={{'aria-label': '输入需要申请证书的域名来开始'}}
-                        placeholder='输入需要申请证书的域名来开始'
+                        placeholder='输入域名来开始'
                         onChange={handleChange}
                     />
-                    <IconButton 
+                    <IconButton
+                        disabled={ !props.ready }
                         type='button'
                         sx={{
                             p: '10px'
