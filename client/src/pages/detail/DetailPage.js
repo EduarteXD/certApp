@@ -1,24 +1,37 @@
-import { Box, Button, CircularProgress, Paper, Typography, Icon, IconButton } from '@mui/material'
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Paper,
+    Typography,
+    Icon,
+    IconButton
+} from '@mui/material'
 import React from 'react'
-import './DetailPage.css'
 import Convert from 'ansi-to-html'
-import { motion, AnimatePresence } from 'framer-motion'
+import {
+    motion,
+    AnimatePresence
+} from 'framer-motion'
 import DnsIcon from '@mui/icons-material/Dns'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+
+import './DetailPage.css'
 
 const convert = new Convert()
 
 const DetailPage = (props) => {
     const ws = props.ws
-    const consoleViewRef = React.useRef(0)
-    const normalViewRef = React.useRef(0)
+    const normalViewRef = React.useRef()
+    const consoleViewRef = React.useRef()
     const pendingResolve = React.useRef({
         domains: [],
         records: []
     })
 
-    // const [code, setCode] = React.useState(-1)
+    const [currentView, setCurrentView] = React.useState(0)
+
     const [toShow, setToShow] = React.useState({
         code: -1
     })
@@ -53,6 +66,7 @@ const DetailPage = (props) => {
             ws.on('stdout', msg => {
                 let component = document.createElement('span')
                 component.innerHTML = convert.toHtml(msg.data).replace('#0A0', '#5C5').replace('#A00', '#C33')
+
                 component.setAttribute('class', 'info')
 
                 let consoleView = document.getElementById('console')
@@ -114,27 +128,6 @@ const DetailPage = (props) => {
                     height: '100%'
                 }}
             >
-                <Button
-                    variant='outlined'
-                    sx={{
-                        margin: '10px 0'
-                    }}
-                    onClick={() => {
-                        if (normalViewRef.current.style.height === '0px') {
-                            consoleViewRef.current.style.height = '0px'
-                            consoleViewRef.current.style.padding = '0 40px'
-                            normalViewRef.current.style.height = '100%'
-                            normalViewRef.current.style.padding = '30px 40px'
-                        } else {
-                            consoleViewRef.current.style.height = '100%'
-                            consoleViewRef.current.style.padding = '30px 40px'
-                            normalViewRef.current.style.height = '0px'
-                            normalViewRef.current.style.padding = '0 40px'
-                        }
-                    }}
-                >
-                    切换视图
-                </Button>
                 <Paper
                     sx={{
                         backgroundColor: '#eee',
@@ -145,49 +138,152 @@ const DetailPage = (props) => {
                     }}
                     ref={normalViewRef}
                 >
-                    {
-                        toShow.code === -1 && (
-                            <Box
-                                sx={{
-                                    textAlign: 'center'
-                                }}
-                            >
-                                <CircularProgress sx={{
-                                    margin: '10px 0 20px 0'
-                                }} />
-                                <Typography>
-                                    等待服务器响应
-                                </Typography>
-                            </Box>
-                        )
-                    }
-                    {
-                        toShow.code === 3 && (
-                            <>
-                                <Typography
-                                    variant='h4'
-                                    sx={{
-                                        padding: '0 20px 20px 0'
+                    <AnimatePresence mode='wait'>
+                        {
+                            toShow.code === -1 && (
+                                <motion.div
+                                    key='await'
+                                    initial={{
+                                        opacity: 0,
+                                        y: 50
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: 20
                                     }}
                                 >
-                                    请设置TXT记录：
-                                </Typography>
-                                <AnimatePresence mode='wait'>
+                                    <Box
+                                        sx={{
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        <CircularProgress sx={{
+                                            margin: '10px 0 20px 0'
+                                        }} />
+                                        <Typography>
+                                            等待执行结果
+                                        </Typography>
+                                    </Box>
+                                </motion.div>
+                            )
+                        }
+                        {
+                            toShow.code === 1 && (
+                                <motion.div
+                                    key='code-1'
+                                    initial={{
+                                        opacity: 0,
+                                        y: 50
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: 20
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        <Typography
+                                            variant='h4'
+                                        >
+                                            验证失败，请稍后重试
+                                        </Typography>
+                                        <Button
+                                            onClick={() => {
+                                                consoleViewRef.current.style.height = '100%'
+                                                consoleViewRef.current.style.padding = '30px 40px'
+                                                normalViewRef.current.style.height = '0px'
+                                                normalViewRef.current.style.padding = '0 40px'
+                                                setCurrentView(1)
+                                            }}
+                                            sx={{
+                                                margin: '10px'
+                                            }}
+                                        >
+                                            控制台输出
+                                        </Button>
+                                    </Box>
+                                </motion.div>
+                            )
+                        }
+                        {
+                            toShow.code === 2 && (
+                                <motion.div
+                                    key='code-2'
+                                    initial={{
+                                        opacity: 0,
+                                        y: 50
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: 20
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        <Typography
+                                            variant='h4'
+                                        >
+                                            原有证书仍在有效期内
+                                        </Typography>
+                                    </Box>
+                                </motion.div>
+                            )
+                        }
+                        {
+                            toShow.code === 3 && (
+                                <motion.div
+                                    key='code-3'
+                                    initial={{
+                                        opacity: 0,
+                                        y: 50
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: 20
+                                    }}
+                                >
+                                    <Typography
+                                        variant='h4'
+                                    >
+                                        请设置TXT记录：
+                                    </Typography>
                                     {
                                         toShow.pendingResolve.domains?.map((value, index) => (
-                                            <motion.span 
+                                            <motion.div
                                                 key={index}
-                                                initial={{ 
+                                                initial={{
                                                     opacity: 0,
-                                                    y: 10
+                                                    y: 50
                                                 }}
-                                                animate={{ 
+                                                animate={{
                                                     opacity: 1,
                                                     y: 0
                                                 }}
-                                                exit={{ 
+                                                exit={{
                                                     opacity: 0,
-                                                    y: -10
+                                                    y: 50
                                                 }}
                                             >
                                                 <Paper
@@ -254,27 +350,27 @@ const DetailPage = (props) => {
                                                         <ContentCopyIcon />
                                                     </IconButton>
                                                 </Paper>
-                                            </motion.span>
+                                            </motion.div>
                                         ))
                                     }
-                                </AnimatePresence>
-                                <Button
-                                    onClick={() => {
-                                        handleExec('renew', props.domain)
-                                        setToShow({
-                                            code: -1
-                                        })
-                                    }}
-                                    variant='outlined'
-                                    sx={{
-                                        margin: '10px 0'
-                                    }}
-                                >
-                                    我已完成解析
-                                </Button>
-                            </>
-                        )
-                    }
+                                    <Button
+                                        onClick={() => {
+                                            handleExec('renew', props.domain)
+                                            setToShow({
+                                                code: -1
+                                            })
+                                        }}
+                                        variant='outlined'
+                                        sx={{
+                                            margin: '10px 0'
+                                        }}
+                                    >
+                                        我已完成解析
+                                    </Button>
+                                </motion.div>
+                            )
+                        }
+                    </AnimatePresence>
                 </Paper>
                 <Paper
                     id='console'
@@ -290,17 +386,50 @@ const DetailPage = (props) => {
                     <span className='info'>Virtual console v20220927@build 0</span>
                     <span className='info'>Data received:</span>
                 </Paper>
-                <Button
-                    onClick={() => {
-                        window.location.hash = '/'
-                    }}
-                    variant='outlined'
+                <Box
                     sx={{
-                        margin: '10px 0'
+                        display: 'flex'
                     }}
                 >
-                    返回
-                </Button>
+                    <Button
+                        onClick={() => {
+                            window.location.hash = '/'
+                        }}
+                        variant='outlined'
+                        sx={{
+                            margin: '10px 0'
+                        }}
+                    >
+                        返回
+                    </Button>
+                    <Box 
+                        sx={{
+                            flex: 1
+                        }}
+                    />
+                    <Button
+                        sx={{
+                            margin: '10px 0'
+                        }}
+                        onClick={() => {
+                            if (normalViewRef.current.style.height === '0px') {
+                                consoleViewRef.current.style.height = '0px'
+                                consoleViewRef.current.style.padding = '0 40px'
+                                normalViewRef.current.style.height = '100%'
+                                normalViewRef.current.style.padding = '30px 40px'
+                                setCurrentView(0)
+                            } else {
+                                consoleViewRef.current.style.height = '100%'
+                                consoleViewRef.current.style.padding = '30px 40px'
+                                normalViewRef.current.style.height = '0px'
+                                normalViewRef.current.style.padding = '0 40px'
+                                setCurrentView(1)
+                            }
+                        }}
+                    >
+                        { currentView ? '切换回主界面' : '切换到控制台' }
+                    </Button>
+                </Box>
             </Box>
         </motion.div>
     )

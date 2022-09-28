@@ -8,6 +8,7 @@ import {
   useLocation
 } from "react-router-dom"
 import { AnimatePresence } from 'framer-motion'
+
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'

@@ -1,12 +1,18 @@
 import React from 'react'
-import './MainPage.css'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import LockIcon from '@mui/icons-material/Lock'
-import { Box, Icon, IconButton, InputBase, Paper } from '@mui/material'
+import { 
+    Box, 
+    Icon, 
+    IconButton, 
+    InputBase, 
+    Paper 
+} from '@mui/material'
 import { motion } from 'framer-motion'
 
+import './MainPage.css'
+
 const MainPage = (props) => {
-    // const ws = props.ws
     const moveon = props.moveon
 
     const [domain, setDomain] = React.useState('')
@@ -16,8 +22,9 @@ const MainPage = (props) => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        // console.log(domain)
+        if(e) {
+            e.preventDefault()
+        }
         moveon(domain)
     }
 
