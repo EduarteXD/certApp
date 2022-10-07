@@ -33,7 +33,7 @@ const MainPage = (props) => {
             className='main'
             initial={{ 
                 opacity: 0,
-                y: '35vh'
+                y: '43vh'
             }}
             animate={{ 
                 opacity: 1,
@@ -41,7 +41,7 @@ const MainPage = (props) => {
             }}
             exit={{ 
                 opacity: 0,
-                y: '35vh'
+                y: '37vh'
             }}
         >
             <Box>
